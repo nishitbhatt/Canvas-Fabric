@@ -1,0 +1,426 @@
+<h4 class="mat-h1" editor-heading [ngClass]="{'mat-elevation-z2' : isEditorBodyScrolled}">
+    <mat-icon editor-icon>format_shapes</mat-icon>
+    Editor
+</h4>
+
+<mat-divider></mat-divider>
+
+<div *ngIf="showEditor" id="editor-body" (scroll)="onEditorScroll($event)">
+
+    <div position-container p-relative pa-8>
+
+        <div d-flex>
+            <div flex-column mr-12>
+                <mat-label appFontMedium>X</mat-label>
+                <mat-form-field appearance="outline" small-width input-md hide-hint>
+                    <input matNativeControl type="number" [(ngModel)]="objectProps.left" (input)="updateCanvas('left')"
+                        number-input>
+                </mat-form-field>
+            </div>
+            <div flex-column mr-12>
+                <mat-label appFontMedium>Y</mat-label>
+                <mat-form-field appearance="outline" small-width input-md hide-hint>
+                    <input matNativeControl type="number" [(ngModel)]="objectProps.top" (input)="updateCanvas('top')"
+                        number-input>
+                </mat-form-field>
+            </div>
+            <div flex-column mr-12>
+                <mat-label appFontMedium>Height</mat-label>
+                <mat-form-field appearance="outline" small-width input-md hide-hint>
+                    <input matNativeControl type="number" [(ngModel)]="objectProps.height"
+                        (input)="updateCanvas('height')" number-input readonly>
+                </mat-form-field>
+            </div>
+            <div flex-column>
+                <mat-label appFontMedium>Width</mat-label>
+                <mat-form-field appearance="outline" small-width input-md hide-hint>
+                    <input matNativeControl type="number" [(ngModel)]="objectProps.width"
+                        (input)="updateCanvas('width')" number-input readonly>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div d-flex mt-8>
+            <div flex-column mr-12>
+                <mat-label appFontMedium>Rotation</mat-label>
+                <mat-form-field appearance="outline" small-width input-md hide-hint>
+                    <input matNativeControl min="0" max="360" type="number" name="rangeAngleSlider1" ngDefaultControl
+                        [(ngModel)]="objectProps.angle" (input)="updateCanvas('angle')" number-input>
+                </mat-form-field>
+            </div>
+
+            <mat-slider slider-rotation slider-center min="0" max="360" step="1" showTickMarks discrete>
+
+                <input matSliderThumb [(ngModel)]="objectProps.angle" name="rangeAngleSlider2"
+                    (input)="updateCanvas('angle')">
+            </mat-slider>
+        </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+
+
+    <div font-container pa-8>
+
+        <div d-flex>
+
+            <div flex-column mr-12>
+                <mat-label appFontMedium>Size</mat-label>
+                <mat-form-field appearance="outline" small-width input-md hide-hint>
+                    <input matNativeControl min="8" type="number" [(ngModel)]="objectProps.fontSize" ngDefaultControl
+                        (input)="updateCanvas('fontSize')" number-input>
+                </mat-form-field>
+            </div>
+            <mat-slider slider-rotation slider-center min="0" max="360" step="1" showTickMarks discrete>
+                <input matSliderThumb [(ngModel)]="objectProps.fontSize" name="rangefontSize"
+                    (input)="updateCanvas('fontSize')">
+            </mat-slider>
+        </div>
+
+        <div d-flex mt-8>
+
+            <div flex-column w-100>
+                <mat-label appFontMedium>
+                    Font
+                </mat-label>
+
+                <mat-form-field appearance="outline" hideRequiredMarker input-md hide-hint>
+                    <mat-select (selectionChange)="updateCanvas('fontFamily')" [(ngModel)]="objectProps.fontFamily">
+                        <mat-option>Clear</mat-option>
+                        <mat-option *ngFor="let option of options" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+
+        <div d-flex mt-8>
+            <div flex-column half-width mr-12>
+                <mat-label appFontMedium>Color</mat-label>
+                <mat-form-field appearance="outline" input-md hide-hint>
+                    <input matNativeControl type="text" [value]="objectProps.fill" readonly
+                        (click)="copyFontColorToClipboard(objectProps.fill);fontColorTooltip.show()">
+                    <div #fontColorTooltip="matTooltip" matTooltip="Copied!" matTooltipPosition="below"></div>
+
+                    <input type="color" matSuffix color-preview-box matTooltip="Choose font color"
+                        matTooltipPosition="below" (input)="updateCanvas('fill')" [(ngModel)]="objectProps.fill">
+                </mat-form-field>
+            </div>
+
+            <div flex-column half-width>
+                <mat-label appFontMedium p-relative>
+                    Background color
+                    <button mat-icon-button matSuffix no-color-button matTooltip="Remove background color"
+                        matTooltipPosition="left" [disabled]="objectProps.backgroundColor===''"
+                        (click)="objectProps.backgroundColor='';updateCanvas('backgroundColor')">
+                        <mat-icon style="font-size: 24px;">block</mat-icon>
+                    </button>
+                </mat-label>
+
+                <mat-form-field appearance="outline" input-md hide-hint>
+                    <input matNativeControl type="text" [value]="objectProps.backgroundColor" readonly
+                        (click)="copyBGColorToClipboard(objectProps.backgroundColor);bgColorTooltip.show()"
+                        [disabled]="objectProps.backgroundColor === ''">
+                    <div #bgColorTooltip="matTooltip" matTooltip="Copied!" matTooltipPosition="below"></div>
+                    <input type="color" matPrefix color-preview-box matTooltip="Choose background color"
+                        matTooltipPosition="below" (input)="updateCanvas('backgroundColor')"
+                        [(ngModel)]="objectProps.backgroundColor">
+                </mat-form-field>
+            </div>
+
+        </div>
+
+        <div d-flex mt-8>
+            <div flex-column>
+                <mat-label appFontMedium p-relative>
+                    Text Gradients
+                </mat-label>
+
+                <div d-flex>
+
+                    <a href="javascript:;" class="mat-elevation-z2" matTooltip="Add New" matTooltipPosition="below"
+                        flex-center gradient-card new-card mr-10>
+                        <mat-icon style="color: #000">add</mat-icon>
+                    </a>
+
+                    <a href="javascript:;" class="mat-elevation-z2" flex-center gradient-card mr-10
+                        style="background: linear-gradient(rgb(255, 15, 71) 0%, rgb(255, 171, 150) 100%); width: 56px; height: 56px;"></a>
+
+                    <a href="javascript:;" class="mat-elevation-z2" flex-center gradient-card mr-10
+                        style="background: linear-gradient(90deg, rgb(255, 142, 68) 0%, rgb(249, 19, 98) 50.52%, rgb(53, 18, 106) 100%);width: 56px; height: 56px;"></a>
+
+                    <a href="javascript:;" class="mat-elevation-z2" flex-center gradient-card mr-10
+                        style="background: linear-gradient(90deg, rgb(41, 241, 156) 0%, rgb(2, 161, 249) 100%);width: 56px; height: 56px;"></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div d-flex mt-8>
+
+            <div flex-column mr-12>
+                <mat-label appFontMedium>Styles</mat-label>
+
+                <div font-style-holder>
+
+
+                    <button *ngIf="!isFontBold" mat-icon-button color="primary" matTooltip="Bold"
+                        matTooltipPosition="below" mr-10 (click)="updateCanvas('fontWeight', 'bold')">
+                        <mat-icon>format_bold</mat-icon>
+                    </button>
+                    <button *ngIf="isFontBold" mat-mini-fab style="box-shadow: none;" color="primary"
+                        matTooltip="Remove" matTooltipPosition="below" mr-10
+                        (click)="updateCanvas('fontWeight', 'normal')">
+                        <mat-icon>format_bold</mat-icon>
+                    </button>
+
+
+                    <button *ngIf="!isFontItalic" mat-icon-button class="mat-elevation-z0" color="primary"
+                        matTooltip="Italic" matTooltipPosition="below" mr-10
+                        (click)="updateCanvas('fontStyle', 'italic')">
+                        <mat-icon>format_italic</mat-icon>
+                    </button>
+                    <button *ngIf="isFontItalic" mat-mini-fab style="box-shadow: none;" class="mat-elevation-z0"
+                        color="primary" matTooltip="Remove" matTooltipPosition="below" mr-10
+                        (click)="updateCanvas('fontStyle', 'normal')">
+                        <mat-icon>format_italic</mat-icon>
+                    </button>
+
+
+                    <button *ngIf="!isFontHasUnderline" mat-icon-button color="primary"
+                        (click)="updateCanvas('underline', true)" matTooltip="Underlined" matTooltipPosition="below"
+                        mr-10>
+                        <mat-icon>format_underlined</mat-icon>
+                    </button>
+                    <button *ngIf="isFontHasUnderline" mat-mini-fab style="box-shadow: none;" color="primary"
+                        (click)="updateCanvas('underline', false)" matTooltip="Remove" matTooltipPosition="below" mr-10>
+                        <mat-icon>format_underlined</mat-icon>
+                    </button>
+
+
+                    <button *ngIf="!isFontHasLinethrough" mat-icon-button color="primary" matTooltip="Strike through"
+                        matTooltipPosition="below" mr-10 (click)="updateCanvas('linethrough', true)">
+                        <mat-icon>strikethrough_s</mat-icon>
+                    </button>
+                    <button *ngIf="isFontHasLinethrough" mat-mini-fab style="box-shadow: none;" color="primary"
+                        matTooltip="Remove" matTooltipPosition="below" mr-10
+                        (click)="updateCanvas('linethrough', false)">
+                        <mat-icon>strikethrough_s</mat-icon>
+                    </button>
+
+
+                    <button *ngIf="!isFontHasOverline" mat-icon-button color="primary" matTooltip="Overline"
+                        matTooltipPosition="below" (click)="updateCanvas('overline', true)">
+                        <mat-icon>format_overline</mat-icon>
+                    </button>
+                    <button *ngIf="isFontHasOverline" mat-mini-fab style="box-shadow: none;" color="primary"
+                        matTooltip="Remove" matTooltipPosition="below" (click)="updateCanvas('overline', false)">
+                        <mat-icon>format_overline</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div d-flex mt-8>
+
+            <div flex-column mr-12>
+
+                <mat-label appFontMedium>Alignment</mat-label>
+
+                <mat-button-toggle-group name="TEXT_ALIGNMENT" appearance="legacy" class="mat-elevation-z1"
+                    color="primary" value="left" (change)="updateCanvas('textAlign', $event)">
+                    <mat-button-toggle value="left" matTooltip="Align Left" matTooltipPosition="below" color="primary">
+                        <mat-icon>format_align_left</mat-icon>
+                    </mat-button-toggle>
+                    <mat-button-toggle value="center" matTooltip="Align Center" matTooltipPosition="below">
+                        <mat-icon>format_align_center</mat-icon>
+                    </mat-button-toggle>
+                    <mat-button-toggle value="right" matTooltip="Align Right" matTooltipPosition="below">
+                        <mat-icon>format_align_right</mat-icon>
+                    </mat-button-toggle>
+                    <mat-button-toggle value="justify" matTooltip="Align Justify" matTooltipPosition="below">
+                        <mat-icon>format_align_justify</mat-icon>
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+        </div>
+
+        <div d-flex mt-8>
+
+            <div d-flex flex-wrap half-width mr-22>
+
+                <div flex-column mr-12>
+                    <mat-label appFontMedium>Opacity</mat-label>
+                    <mat-form-field appearance="outline" small-width input-md hide-hint>
+                        <input matNativeControl min="0" max="100" step="1" type="number"
+                            [value]="!!objectProps.opacity ? objectProps.opacity * 100 : 0" number-input
+                            ngDefaultControl (input)="updateCanvas('opacity', $event)">
+                    </mat-form-field>
+                </div>
+
+                <div flex-column>
+                    <mat-label appFontMedium>Spacing</mat-label>
+                    <mat-form-field appearance="outline" small-width input-md hide-hint>
+                        <input matNativeControl type="number" value="100" number-input ngDefaultControl
+                            [(ngModel)]="objectProps.charSpacing" (input)="updateCanvas('charSpacing')">
+
+                    </mat-form-field>
+                </div>
+
+                <div flex-column mt-8 mr-12>
+                    <mat-label appFontMedium>Line Height</mat-label>
+                    <mat-form-field appearance="outline" small-width input-md hide-hint>
+                        <input matNativeControl type="number" number-input ngDefaultControl min="1" max="50" step="1"
+                            [(ngModel)]="objectProps.lineHeight" (input)="updateCanvas('lineHeight')">
+
+                    </mat-form-field>
+                </div>
+
+                <div flex-column mt-8>
+                    <mat-label appFontMedium>Stroke</mat-label>
+                    <mat-form-field appearance="outline" small-width input-md hide-hint>
+                        <input matNativeControl type="number" min="1" max="75" step="1"
+                            [value]="!!objectProps.strokeWidth ? objectProps.strokeWidth * 10 : 0"
+                            (input)="updateCanvas('strokeWidth', $event)" number-input>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+
+            <div d-flex flex-wrap half-width p-relative>
+
+
+                <mat-slider min="0" max="100" step="1" slider-rotation discrete>
+                    <input matSliderThumb [value]="!!objectProps.opacity ? objectProps.opacity * 100 : 0"
+                        (input)="updateCanvas('opacity', $event)">
+                </mat-slider>
+
+
+                <mat-slider min="-100" max="100" slider-rotation step="1" discrete>
+                    <input matSliderThumb [(ngModel)]="objectProps.charSpacing" (input)="updateCanvas('charSpacing')">
+                </mat-slider>
+
+                <mat-slider min="1" max="50" step="1" slider-rotation discrete>
+                    <input matSliderThumb [(ngModel)]="objectProps.lineHeight" (input)="updateCanvas('lineHeight')">
+                </mat-slider>
+
+
+                <mat-slider min="1" max="75" step="1" slider-rotation discrete>
+                    <input matSliderThumb [value]="!!objectProps.strokeWidth ? objectProps.strokeWidth * 100 : 0"
+                        (input)="updateCanvas('strokeWidth', $event)">
+                </mat-slider>
+            </div>
+        </div>
+
+
+
+        <div flex-column half-width mt-8>
+            <mat-label appFontMedium>Stroke Color</mat-label>
+            <mat-form-field appearance="outline" input-md hide-hint>
+
+                <input matNativeControl type="text" [value]="objectProps.stroke" readonly
+                    (click)="copyFontStrokeColorToClipboard(objectProps.stroke);fontStrokeColorTooltip.show()">
+                <div #fontStrokeColorTooltip="matTooltip" matTooltip="Copied!" matTooltipPosition="below"></div>
+
+                <input type="color" matSuffix color-preview-box matTooltip="Choose font color"
+                    matTooltipPosition="below" (input)="updateCanvas('stroke')" [(ngModel)]="objectProps.stroke">
+            </mat-form-field>
+        </div>
+
+    </div>
+
+
+    <mat-divider></mat-divider>
+
+    <div shadow-container pa-8 p-relative>
+
+        <mat-label *ngIf="!showFontShadowContainer" class="mat-headline-h5" appFontMedium p-relative fontShadowLabel>
+            Shadow
+        </mat-label>
+
+        <button *ngIf="showFontShadowContainer" mat-mini-fab no-shadow-button no-shadow color="primary" style="box-shadow: none;" matTooltip="Remove Shadow"
+            matTooltipPosition="left" mr-12 (click)="removeShadow()">
+            <mat-icon>visibility_off</mat-icon>
+        </button>
+        <button *ngIf="!showFontShadowContainer" mat-mini-fab no-shadow-button no-shadow color="primary" style="box-shadow: none;" matTooltip="Show Shadow"
+            matTooltipPosition="left" mr-12 (click)="addShadow()">
+            <mat-icon>visibility</mat-icon>
+        </button>
+
+        <div *ngIf="showFontShadowContainer">
+
+            <div d-flex>
+                <div flex-column>
+                    <mat-label appFontMedium p-relative>
+                        Shadow color
+                    </mat-label>
+                    <mat-form-field appearance="outline" input-md hide-hint>
+                        
+                        <input matNativeControl (input)="updateCanvas('shadow')" [(ngModel)]="fontShadow.color" type="text" #myInput (click)="copyFontShadowColorClipboard(fontShadow.color);fontShadowTooltip.show();myInput.select();">
+
+                        <input type="color" matSuffix color-preview-box matTooltip="Choose shadow color"
+                            matTooltipPosition="below" (input)="updateCanvas('shadow')" [(ngModel)]="fontShadow.color">
+                        <div #fontShadowTooltip="matTooltip" matTooltip="Copied!" matTooltipPosition="below"></div>
+                    </mat-form-field>
+                </div>
+            </div>
+    
+    
+            <div d-flex mt-8>
+                <div d-flex flex-wrap half-width mr-22>
+    
+                    <div flex-column mr-12>
+                        <mat-label appFontMedium>X Offset</mat-label>
+                        <mat-form-field appearance="outline" small-width input-md hide-hint>
+                            <input matNativeControl type="number" min="-50" max="50" number-input [(ngModel)]="fontShadow.offsetX"
+                                (input)="updateCanvas('shadow')">
+                        </mat-form-field>
+                    </div>
+                    <div flex-column>
+                        <mat-label appFontMedium>Y Offset</mat-label>
+                        <mat-form-field appearance="outline" small-width input-md hide-hint>
+                            <input matNativeControl type="number" min="-50" max="50" number-input [(ngModel)]="fontShadow.offsetY"
+                                (input)="updateCanvas('shadow')">
+                        </mat-form-field>
+                    </div>
+                    <div flex-column mt-8>
+                        <mat-label appFontMedium>Blur</mat-label>
+                        <mat-form-field appearance="outline" small-width input-md hide-hint>
+                            <input matNativeControl type="number" [(ngModel)]="fontShadow.blur"
+                                (input)="updateCanvas('shadow')" number-input>
+                        </mat-form-field>
+                    </div>
+                </div>
+    
+                <div d-flex flex-wrap half-width p-relative>
+    
+    
+                    <mat-slider min="-50" max="50" slider-rotation step="1" discrete>
+                        <input matSliderThumb (input)="updateCanvas('shadow')" [(ngModel)]="fontShadow.offsetX">
+                    </mat-slider>
+    
+    
+                    <mat-slider min="-50" max="50" slider-rotation step="1" discrete>
+                        <input matSliderThumb (input)="updateCanvas('shadow')" [(ngModel)]="fontShadow.offsetY">
+                    </mat-slider>
+    
+    
+                    <mat-slider min="0" max="50" step="1" slider-rotation discrete>
+                        <input matSliderThumb (input)="updateCanvas('shadow')" [(ngModel)]="fontShadow.blur">
+                    </mat-slider>
+    
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div *ngIf="!showEditor" class="mat-headline-5" pa-8 appFontNormal>No Selection Found!</div>

@@ -1,0 +1,55 @@
+<style lang="scss">
+  [app-holder] {
+    background-color: #edeeee;
+
+  }
+
+  app-editor {
+    width: 100%;
+    height: 100%;
+    background-color: #FAFAFA;
+    transition: all .2s ease;
+  }
+
+  app-header {
+    z-index: 1;
+  }
+</style>
+
+<main>
+
+  <mat-grid-list cols="14" rowHeight="100vh" app-holder>
+
+    <mat-grid-tile [colspan]="isEditorOpen ? 11 : 14" canvas-holder>
+
+      <!-- Left Menu -->
+      <app-tool-menu 
+          *ngIf="isToolMenuOpen"
+          (addTextBox)="addTextBoxInCanvas()"></app-tool-menu>
+
+
+      <!-- App Header -->
+      <app-header
+          [(toolsOpen)]="isToolMenuOpen"
+          [(editorOpen)]="isEditorOpen"
+          ></app-header>
+
+      <!-- Canvas -->
+      <app-canvas-board 
+          (select)="objectSelect($event)"></app-canvas-board>
+
+    </mat-grid-tile>
+    
+    <mat-grid-tile *ngIf="isEditorOpen" colspan="3" class="mat-elevation-z2" app-editor-contianer>
+
+      <!-- Editor On Right -->
+      <app-editor 
+        [showEditor]="isObjectSelected" 
+        [objectProps]="objectProps"
+        (propchange)="updateCanvas($event)"
+        ></app-editor>
+
+    </mat-grid-tile>
+  </mat-grid-list>
+
+</main>

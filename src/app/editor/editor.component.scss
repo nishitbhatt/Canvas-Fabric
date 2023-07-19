@@ -1,0 +1,92 @@
+#editor-body {
+    height: calc(100vh - 64px);
+    overflow-x: hidden;
+}
+
+[editor-heading] {
+    padding: 12px 15px;
+    margin: 0;
+    font-weight: bold;
+    background: #fff;
+}
+
+[editor-icon] {
+    position: relative;
+    top: 5px;
+    margin-right: 10px;
+}
+
+mat-chip {
+    justify-content: space-between;
+}
+
+[number-input] {
+    -moz-appearance: textfield;
+}
+
+/* [number-input]::-webkit-outer-spin-button,
+[number-input]::-webkit-inner-spin-button {
+    display: none;
+} */
+
+[slider-rotation] {
+    width: 100%;
+    margin: 0px 0 -10px 0px;
+}
+
+[slider-rotation][slider-center] {
+    margin-left: 10px;
+    margin-right: 3px;
+    margin-top: 16px;
+}
+
+[color-preview-box] {
+    width: 44px;
+    height: 44px;
+    background-color: transparent;
+    border: 5px solid transparent;
+    cursor: pointer;
+    min-width: 44px;
+}
+
+[no-color-button] {
+    padding: 0;
+    position: absolute;
+    right: 0px;
+    width: 30px;
+    height: 30px;
+    bottom: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[no-shadow-button] {
+    position: absolute;
+    z-index: 1;
+    top: 8px;
+    right: -8px;
+}
+
+[gradient-card] {
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+
+    &[new-card] {
+        background-image: url('/assets/gradient_edit.png');
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+}
+
+[input-md] {
+    background-color: #fff;
+}
+
+[fontShadowLabel] {
+    position: relative;
+    top: 7px;
+    text-transform: uppercase;
+}

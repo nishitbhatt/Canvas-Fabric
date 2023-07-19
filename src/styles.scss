@@ -1,0 +1,172 @@
+/* You can add global styles to this file, and also import other style files */
+html {
+    --scrollbarBG: #FAFAFA;
+    --thumbBG: #90A4AE;
+}
+
+#editor-body::-webkit-scrollbar {
+    width: 11px;
+}
+
+#editor-body {
+    scrollbar-width: thin;
+    scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+
+#editor-body::-webkit-scrollbar-track {
+    background: var(--scrollbarBG);
+}
+
+#editor-body::-webkit-scrollbar-thumb {
+    background-color: var(--thumbBG);
+    border-radius: 6px;
+    border: 3px solid var(--scrollbarBG);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+[mx-auto] {
+    margin-left: auto;
+    margin-right: auto;
+}
+[noShadow] {
+    box-shadow: none !important;
+}
+[textCenter] {
+    text-align: center !important;
+}
+[uppercase] {
+    text-transform: uppercase !important;
+}
+[w-100] {
+    width: 100%;
+}
+[overflow-y]{
+    overflow-y: auto;
+}
+[p-relative] {
+    position: relative;
+}
+
+[half-width] {
+    width: 100%;
+    max-width: 48.5%;
+}
+
+[app-spacer] {
+    flex: 1 1 auto;
+}
+
+[appFontNormal] {
+    font-weight: 400 !important;
+}
+[appFontMedium] {
+    font-weight: 500 !important;
+}
+
+[appFontBold] {
+    font-weight: bold !important;
+}
+
+[pa-8] {
+    padding: 16px !important;
+}
+
+[mb-1] {
+    margin-bottom: 4px !important;
+}
+
+[mb-2] {
+    margin-bottom: 8px !important;
+}
+
+[mr-2] {
+    margin-right: 8px !important;
+}
+
+
+[ml-10] {
+    margin-left: 10px !important;
+}
+[mr-10] {
+    margin-right: 10px !important;
+}
+[mr-12] {
+    margin-right: 12px !important;
+}
+[mr-20] {
+    margin-right: 20px !important;
+}
+[mr-22] {
+    margin-right: 22px !important;
+}
+
+[mt-8] {
+    margin-top: 16px !important;
+}
+
+[my-8] {
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
+}
+
+[d-flex] {
+    display: flex !important;
+}
+
+[flex-column] {
+    display: flex;
+    flex-direction: column;
+}
+[justify-between] {
+    justify-content: space-between !important;
+}
+[align-center] {
+    align-items: center !important;
+}
+[flex-wrap] {
+    flex-wrap: wrap;
+}
+[flex-center] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+[small-width] {
+    max-width: 80px !important;
+}
+
+[input-md] .mat-mdc-text-field-wrapper {
+    height: 44px;
+}
+
+[input-md] .mat-mdc-form-field-infix {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    min-height: 44px !important;
+    display: flex;
+    align-items: center;
+}
+
+[hide-hint] .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}
+
+[font-container] {
+
+    .mdc-fab--mini {
+        width: 48px;
+        height: 48px;
+    }
+    .mat-button-toggle-checked {
+        background-color: #e3e6f2;
+        color: rgb(63 81 181);
+    }
+}

@@ -1,0 +1,59 @@
+<style>
+    [app-header] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #212121;
+        color: #fff;
+        height: 56px;
+    }
+
+    [doc-title] {
+        outline: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 300px;
+    }
+
+    [canvas-dimension] {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    [doc-title]:hover {
+        border-radius: 4px;
+        width: auto;
+        outline: 1px solid grey;
+        cursor: pointer;
+    }
+
+    [doc-title][in-editmode="true"] {
+        border-radius: 4px;
+        width: auto;
+        outline: 1px solid white;
+    }
+</style>
+
+<mat-toolbar class="mat-elevation-z2" app-header>
+
+    <button mat-icon-button [matTooltip]="menuToolsToolTip" matTooltipPosition="below" (click)="toggleToolMenu()">
+        <mat-icon *ngIf="!toolsOpen">widgets</mat-icon>
+        <mat-icon *ngIf="toolsOpen">arrow_back_ios</mat-icon>
+    </button>
+
+    <span contenteditable="true" doc-title matTooltip="Click to edit" matTooltipPosition="below">
+        Untitled document
+    </span>
+
+    <span canvas-dimension class="mat-body-2">650 X 800 px</span>
+
+    <span app-spacer></span>
+
+    <button mat-icon-button [matTooltip]="editorToolTip" matTooltipPosition="below" (click)="toggleEditor()">
+        <mat-icon *ngIf="!editorOpen">format_shapes</mat-icon>
+        <mat-icon *ngIf="editorOpen">arrow_forward_ios</mat-icon>
+    </button>
+
+</mat-toolbar>

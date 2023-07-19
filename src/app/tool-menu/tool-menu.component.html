@@ -1,0 +1,27 @@
+<style>
+    [object-tools-menu] {
+        max-width: 100%;
+        width: auto;
+        position: absolute;
+        left: 10px;
+        top: 68px;
+        border-radius: 0px;
+    }
+</style>
+<mat-card object-tools-menu>
+    <mat-card-content d-flex flex-column>
+        <button color="primary" noShadow mat-fab mb-2 mx-auto (click)="addTextboxToCanvas()">
+            <mat-icon>text_fields</mat-icon>
+        </button>
+        <span mb-2 appFontMedium textCenter uppercase>Text</span>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content d-flex flex-column mt-8 matTooltip="Coming soon!" matTooltipPosition="below">
+        <button color="primary" noShadow mat-fab mb-2 mx-auto disabled="true">
+            <mat-icon>shape_line</mat-icon>
+        </button>
+        <span appFontMedium textCenter uppercase>Elements</span>
+    </mat-card-content>
+</mat-card>
